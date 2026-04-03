@@ -12,7 +12,7 @@ class SongList < FXList
     { title: "Lilith", artist: "Saint Avangeline", file: "music/Lilith.mp3"},
     { title: "Spin the Wheel", artist: "Mick Wingert", file: "music/Mick Wingert - Spin The Wheel.mp3"},
     { title: "Daft Punk", artist: "Pentatonix", file: "music/Pentatonix - Daft Punk.mp3"},
-    { title: "Dancing with your Ghost", artist: "Sasha Alex Sloan", file: "music/die_for_you.mp3"},
+    { title: "Dancing with your Ghost", artist: "Sasha Alex Sloan", file: "music/Sasha Alex Sloan - Dancing With Your Ghost.mp3"},
   ].freeze
 
   def initialize(parent, app)
