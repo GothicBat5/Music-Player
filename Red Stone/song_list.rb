@@ -1,19 +1,18 @@
 # frozen_string_literal: true
-
 require 'fox16'
 require_relative 'theme'
 include Fox
 
 class SongList < FXList
-  TRACKS = [
-    { title: "Sanctuary", artist: "Joji"},
-    { title: "ASMR Ear Whisper", artist: "Unknown" },
-    { title: "K", artist: "Cigarette After Sex"},
-    { title: "FANCY", artist: "TWICE"},
-    { title: "Tadow", artist: "Masego"},
-    { title: "Glimpse of Us", artist: "Joji"},
-    { title: "SLOW DANCING IN THE DARK", artist: "Joji"},
-    { title: "Die For You", artist: "The Weeknd"},
+  TRACKS = [ #this is all must be in the same file folder, make sure to create a sub folder inside your IDE
+    { title: "Sanctuary", artist: "Joji", file: "music/Joji - Sanctuary.mp3"},
+    { title: "Die For You", artist: "Joji", file: "music/Joji - Die For you.mp3"},
+    { title: "Love Us Again", artist: "Joji", file: "music/Joji - love us again.mp3"},
+    { title: "Kung Fu Hustle Soundtrack", artist: "Zhi Yao Wei Ni Huo Yi Tian", file: "music/zhi_yao.mp3"},
+    { title: "Lilith", artist: "Saint Avangeline", file: "music/Lilith.mp3"},
+    { title: "Spin the Wheel", artist: "Mick Wingert", file: "music/Mick Wingert - Spin The Wheel.mp3"},
+    { title: "Daft Punk", artist: "Pentatonix", file: "music/Pentatonix - Daft Punk.mp3"},
+    { title: "Dancing with your Ghost", artist: "Sasha Alex Sloan", file: "music/die_for_you.mp3"},
   ].freeze
 
   def initialize(parent, app)
