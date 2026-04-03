@@ -8,8 +8,8 @@ require_relative 'player'
 include Fox
 
 class MainWindow < FXMainWindow
-  WINDOW_W = 680
-  WINDOW_H = 460
+  WINDOW_W = 900
+  WINDOW_H = 545
 
   def initialize(app)
     super(app, "Wavelength  ·  Music Player", width: WINDOW_W, height: WINDOW_H, opts: DECOR_ALL)
@@ -29,7 +29,7 @@ class MainWindow < FXMainWindow
   end
 
   def build_sidebar(parent, app)
-    sidebar = FXVerticalFrame.new(parent, LAYOUT_FILL_Y | LAYOUT_FIX_WIDTH | FRAME_NONE, width: 240, padTop: 0, padBottom: 0, padLeft: 0, padRight: 0, vSpacing: 0)
+    sidebar = FXVerticalFrame.new(parent, LAYOUT_FILL_Y | LAYOUT_FIX_WIDTH | FRAME_NONE, width: 290, padTop: 0, padBottom: 0, padLeft: 0, padRight: 0, vSpacing: 0)
     sidebar.backColor = Theme::SURFACE
 
     hdr = FXLabel.new(sidebar, "  Queue")
@@ -46,9 +46,8 @@ class MainWindow < FXMainWindow
     @song_list.backColor = Theme::SURFACE
   end
 
-  # Right main panel -------------------------------------------------------
   def build_main_panel(parent, app)
-    panel = FXVerticalFrame.new(parent, LAYOUT_FILL_X | LAYOUT_FILL_Y | FRAME_NONE, padTop: 24, padBottom: 16, padLeft: 24, padRight: 24, vSpacing: 14)
+    panel = FXVerticalFrame.new(parent, LAYOUT_FILL_X | LAYOUT_FILL_Y | FRAME_NONE, padTop: 28, padBottom: 18, padLeft: 32, padRight: 32, vSpacing: 16)
     panel.backColor = Theme::BACKGROUND
 
     build_album_art(panel, app)
@@ -63,26 +62,23 @@ class MainWindow < FXMainWindow
 
     FXLabel.new(wrapper, "", opts: LAYOUT_FILL_X).backColor = Theme::BACKGROUND
 
-    art = FXCanvas.new(wrapper, nil, 0, FRAME_NONE | LAYOUT_FIX_WIDTH | LAYOUT_FIX_HEIGHT, width: 160, height: 160)
+    art = FXCanvas.new(wrapper, nil, 0, FRAME_NONE | LAYOUT_FIX_WIDTH | LAYOUT_FIX_HEIGHT, width: 180, height: 180)
     art.backColor = Theme::ART_BG
-
     @album_art = art
 
-    art.connect(SEL_PAINT) do |sender, sel, event|
+    art.connect(SEL_PAINT) do |sender, _sel, event|
       dc = FXDCWindow.new(sender, event)
       dc.foreground = Theme::ART_BG
       dc.fillRectangle(0, 0, sender.width, sender.height)
 
       cx = sender.width  / 2
       cy = sender.height / 2
-      [66, 50, 34, 18].each do |r|
+      [76, 58, 40, 22].each do |r|
         dc.foreground = Theme::ART_BORDER
         dc.drawArc(cx - r, cy - r, r * 2, r * 2, 0, 360 * 64)
       end
-      # Centre dot
       dc.foreground = Theme::ACCENT
-      dc.fillArc(cx - 5, cy - 5, 10, 10, 0, 360 * 64)
-
+      dc.fillArc(cx - 6, cy - 6, 12, 12, 0, 360 * 64)
       dc.end
     end
 
@@ -94,15 +90,16 @@ class MainWindow < FXMainWindow
     info.backColor = Theme::BACKGROUND
 
     @track_label = FXLabel.new(info, "Select a track", opts: JUSTIFY_CENTER_X)
-    @track_label.font      = Theme.title_font(app)
+    @track_label.font = Theme.title_font(app)
     @track_label.textColor = Theme::TEXT_PRIMARY
     @track_label.backColor = Theme::BACKGROUND
 
     @artist_label = FXLabel.new(info, "", opts: JUSTIFY_CENTER_X)
-    @artist_label.font      = Theme.artist_font(app)
+    @artist_label.font = Theme.artist_font(app)
     @artist_label.textColor = Theme::TEXT_SECONDARY
     @artist_label.backColor = Theme::BACKGROUND
   end
+
 
   def build_controls(parent, app)
     @controls = Controls.new(parent, app)
@@ -122,7 +119,7 @@ class MainWindow < FXMainWindow
     spacer.backColor = Theme::BACKGROUND
 
     @state_badge = FXLabel.new(bar, "STOPPED")
-    @state_badge.font = Theme.label_font(app)
+    @state_badge.font  = Theme.label_font(app)
     @state_badge.textColor = Theme::TEXT_MUTED
     @state_badge.backColor = Theme::BACKGROUND
   end
@@ -130,46 +127,73 @@ class MainWindow < FXMainWindow
   def wire_events
     @player = Player.new
 
+    # List selection — update track info panel
     @song_list.connect(SEL_COMMAND) do
       update_track_display
     end
 
-    # Play
     @controls.play_btn.connect(SEL_COMMAND) do
       track = @song_list.selected_track
-      if track
-        @player.play(track[:title])
-        @controls.play_btn.text  = "⏸  Pause"
-        @status_label.text = "Playing  #{track[:title]}  ·  #{track[:artist]}"
-        @state_badge.text = "PLAYING"
-        @state_badge.textColor = Theme::ACCENT
+      next unless track
+
+      if @player.playing
+        @player.stop
+        @controls.play_btn.text = "▶  Play"
+        @status_label.text = "Paused  ·  #{track[:title]}"
+        @state_badge.text = "PAUSED"
+        @state_badge.textColor = Theme::TEXT_SECONDARY
+      else
+        success = @player.play(track[:file])
+        if success
+          @controls.play_btn.text = "⏸  Pause"
+          @status_label.text = "Playing  #{track[:title]}  ·  #{track[:artist]}"
+          @state_badge.text = "PLAYING"
+          @state_badge.textColor = Theme::ACCENT
+        else
+          @status_label.text = "⚠  File not found: #{track[:file]}"
+          @state_badge.text = "ERROR"
+          @state_badge.textColor = Theme::BTN_STOP_TXT
+        end
       end
     end
 
-    # Stop
+    #Stop
     @controls.stop_btn.connect(SEL_COMMAND) do
       @player.stop
-      @controls.play_btn.text  = "▶  Play"
+      @controls.play_btn.text = "▶  Play"
       @status_label.text = "Stopped"
       @state_badge.text = "STOPPED"
       @state_badge.textColor = Theme::TEXT_MUTED
-      @controls.progress_slider.value = 0
+      @controls.progress_slider.value  = 0
     end
 
-    # Previous
+    #Previous track
     @controls.prev_btn.connect(SEL_COMMAND) do
-      n = @song_list.count
       next_idx = [(@song_list.currentItem - 1), 0].max
       @song_list.currentItem = next_idx
       update_track_display
+      auto_play_current
     end
 
-    # Next
+    #Next track
     @controls.next_btn.connect(SEL_COMMAND) do
-      n = @song_list.count
-      next_idx = [(@song_list.currentItem + 1), n - 1].min
+      next_idx = [(@song_list.currentItem + 1), @song_list.count - 1].min
       @song_list.currentItem = next_idx
       update_track_display
+      auto_play_current
+    end
+
+    #Volume slider
+    @controls.volume_slider.connect(SEL_CHANGED) do
+      level = @controls.volume_slider.value
+      @controls.volume_label.text = "#{level}%"
+      @player.set_volume(level)
+    end
+
+    # Cleanup ffplay process when window is closed
+    connect(SEL_CLOSE) do
+      @player.cleanup
+      getApp.exit(0)
     end
   end
 
@@ -180,6 +204,23 @@ class MainWindow < FXMainWindow
     @track_label.text  = track[:title]
     @artist_label.text = track[:artist]
     @status_label.text = "#{track[:title]}  ·  #{track[:artist]}"
-    @album_art.update  # repaint the vinyl graphic
+    @album_art.update
+  end
+
+  def auto_play_current
+    track = @song_list.selected_track
+    return unless track
+
+    success = @player.play(track[:file])
+    if success
+      @controls.play_btn.text = "⏸  Pause"
+      @status_label.text = "Playing  #{track[:title]}  ·  #{track[:artist]}"
+      @state_badge.text = "PLAYING"
+      @state_badge.textColor = Theme::ACCENT
+    else
+      @status_label.text = "⚠  File not found: #{track[:file]}"
+      @state_badge.text = "ERROR"
+      @state_badge.textColor = Theme::BTN_STOP_TXT
+    end
   end
 end
