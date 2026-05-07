@@ -1,11 +1,9 @@
-#include <linux/module.h>
+
 #include <sound/core.h>
 #include <sound/minors.h>
 #include <sound/info.h>
 #include <sound/control.h>
 #include <sound/initval.h>
-#include <linux/kmod.h>
-#include <linux/mutex.h>
 
 static int major = CONFIG_SND_MAJOR;
 int snd_major;
@@ -13,8 +11,6 @@ EXPORT_SYMBOL(snd_major);
 
 static int cards_limit = 1;
 
-MODULE_AUTHOR("Jaroslav Kysela <perex@perex.cz>");
-MODULE_DESCRIPTION("Advanced Linux Sound Architecture driver for soundcards.");
 MODULE_LICENSE("GPL");
 module_param(major, int, 0444);
 MODULE_PARM_DESC(major, "Major # for sound driver.");
