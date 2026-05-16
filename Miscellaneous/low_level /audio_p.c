@@ -1,4 +1,3 @@
-
 #include <sound/core.h>
 #include <sound/minors.h>
 #include <sound/info.h>
@@ -247,15 +246,11 @@ static void snd_minor_info_read(struct snd_info_entry *entry, struct snd_info_bu
 		mptr = snd_minors[minor];
 		if (!mptr) continue;
 		if (mptr->card >= 0) {
-			if (mptr->device >= 0)
-				snd_iprintf(buffer, "%3i: [%2i-%2i]: %s\n",minor, mptr->card, mptr->device, snd_device_type_name(mptr->type));
-			else
-				snd_iprintf(buffer, "%3i: [%2i]: %s\n", minor, mptr->card, snd_device_type_name(mptr->type));
-		} else
-			snd_iprintf(buffer, "%3i:: %s\n", minor, snd_device_type_name(mptr->type));
+			if (mptr->device >= 0) snd_iprintf(buffer, "%3i: [%2i-%2i]: %s\n",minor, mptr->card, mptr->device, snd_device_type_name(mptr->type));
+			else snd_iprintf(buffer, "%3i: [%2i]: %s\n", minor, mptr->card, snd_device_type_name(mptr->type));
+		} else snd_iprintf(buffer, "%3i:: %s\n", minor, snd_device_type_name(mptr->type));
 	}
 }
-
 int __init snd_minor_info_init(void)
 {
 	struct snd_info_entry *entry;
@@ -265,31 +260,4 @@ int __init snd_minor_info_init(void)
 	entry->c.text.read = snd_minor_info_read;
 	return snd_info_register(entry); /* freed in error path */
 }
-#endif /* CONFIG_SND_PROC_FS */
-
-static int __init alsa_sound_init(void)
-{
-	snd_major = major;
-	snd_ecards_limit = cards_limit;
-	if (register_chrdev(major, "alsa", &snd_fops)) {
-		pr_err("ALSA core: unable to register native major device number %d\n", major); return -EIO;
-	}
-	if (snd_info_init() < 0) {
-		unregister_chrdev(major, "alsa"); return -ENOMEM;
-	}
-
-#ifdef CONFIG_SND_DEBUG sound_debugfs_root = debugfs_create_dir("sound", NULL);
-#endif
-#ifndef MODULE pr_info("Advanced Linux Sound Architecture Driver Initialized.\n");
-#endif return 0;
-}
-
-static void __exit alsa_sound_exit(void)
-{
-#ifdef CONFIG_SND_DEBUG debugfs_remove(sound_debugfs_root);
-#endif
-	snd_info_done();
-	unregister_chrdev(major, "alsa");
-}
-subsys_initcall(alsa_sound_init);
-module_exit(alsa_sound_exit);
+#endif 
