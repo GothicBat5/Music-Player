@@ -13,26 +13,17 @@ int read_num()
     {
         printf("<Lines> : ");
         
-        if(!fgets(input, sizeof(input), stdin))
-        {
-            continue;
-        }
+        if(!fgets(input, sizeof(input), stdin)) continue;
+
         
         value = strtol(input, &end, 10);
         
-        if(end == input || *end != '\n')
-        {
-            printf("Invalid Input.");
-        }
+        if(end == input || *end != '\n') printf("Invalid Input.");
+
         
-        else if(value < 0)
-        {
-            printf("Not valid input");
-        }
-        else
-        {
-            return (int) value;
-        }
+        else if(value < 0) printf("Not valid input");
+
+        else return (int) value;
     }
 }
 
