@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# ruby player this
 
 require 'fox16'
 require_relative 'theme'
@@ -71,7 +72,7 @@ class MainWindow < FXMainWindow
       dc.foreground = Theme::ART_BG
       dc.fillRectangle(0, 0, sender.width, sender.height)
 
-      cx = sender.width  / 2
+      cx = sender.width / 2
       cy = sender.height / 2
       [76, 58, 40, 22].each do |r|
         dc.foreground = Theme::ART_BORDER
@@ -119,7 +120,7 @@ class MainWindow < FXMainWindow
     spacer.backColor = Theme::BACKGROUND
 
     @state_badge = FXLabel.new(bar, "STOPPED")
-    @state_badge.font  = Theme.label_font(app)
+    @state_badge.font = Theme.label_font(app)
     @state_badge.textColor = Theme::TEXT_MUTED
     @state_badge.backColor = Theme::BACKGROUND
   end
@@ -127,7 +128,7 @@ class MainWindow < FXMainWindow
   def wire_events
     @player = Player.new
 
-    # List selection — update track info panel
+    # List selection: update track info panel
     @song_list.connect(SEL_COMMAND) do
       update_track_display
     end
@@ -201,7 +202,7 @@ class MainWindow < FXMainWindow
     track = @song_list.selected_track
     return unless track
 
-    @track_label.text  = track[:title]
+    @track_label.text = track[:title]
     @artist_label.text = track[:artist]
     @status_label.text = "#{track[:title]}  ·  #{track[:artist]}"
     @album_art.update
