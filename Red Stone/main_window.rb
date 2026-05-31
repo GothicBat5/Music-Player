@@ -11,7 +11,7 @@ class MainWindow < FXMainWindow
   WINDOW_W = 900
   WINDOW_H = 545
   POLL_INTERVAL = 500
-  ART_INTERVAL  = 40   # ~25 fps for the spinning rings
+  ART_INTERVAL = 40   # ~25 fps for the spinning rings
 
   def initialize(app)
     super(app, "Wavelength  ·  Music Player", width: WINDOW_W, height: WINDOW_H, opts: DECOR_ALL)
@@ -19,7 +19,7 @@ class MainWindow < FXMainWindow
     self.backColor = Theme::BACKGROUND
 
     @rotation_angle = 0.0   # degrees, drives the animated rings
-    @art_spinning   = false
+    @art_spinning = false
 
     build_layout(app)
     wire_events
@@ -74,8 +74,7 @@ class MainWindow < FXMainWindow
 
     FXLabel.new(wrapper, "", opts: LAYOUT_FILL_X).backColor = Theme::BACKGROUND
 
-    art = FXCanvas.new(wrapper, nil, 0,
-                       FRAME_NONE | LAYOUT_FIX_WIDTH | LAYOUT_FIX_HEIGHT,
+    art = FXCanvas.new(wrapper, nil, 0, FRAME_NONE | LAYOUT_FIX_WIDTH | LAYOUT_FIX_HEIGHT,
                        width: 180, height: 180)
     art.backColor = Theme::ART_BG
     @album_art = art
@@ -92,12 +91,12 @@ class MainWindow < FXMainWindow
       # angular offset by drawing a full ellipse shifted slightly — FOX's
       # drawArc doesn't support rotation of the ellipse axes, so we shift
       # the centre of each ring along a tiny orbit instead.
-      radii   = [76, 58, 40, 22]
+      radii = [76, 58, 40, 22]
       offsets = [1.0, 0.7, 0.5, 0.3]   # how much each ring "wobbles"
 
       radii.each_with_index do |r, i|
         angle_rad = (@rotation_angle + i * 22) * Math::PI / 180.0
-        orbit     = offsets[i] * 4      # max pixel drift
+        orbit = offsets[i] * 4      # max pixel drift
         ox = (Math.cos(angle_rad) * orbit).round
         oy = (Math.sin(angle_rad) * orbit).round
 
@@ -151,15 +150,14 @@ class MainWindow < FXMainWindow
     spacer.backColor = Theme::BACKGROUND
 
     @state_badge = FXLabel.new(bar, "STOPPED")
-    @state_badge.font      = Theme.label_font(app)
+    @state_badge.font = Theme.label_font(app)
     @state_badge.textColor = Theme::TEXT_MUTED
     @state_badge.backColor = Theme::BACKGROUND
   end
 
   # One-line hint bar at the very bottom listing keyboard shortcuts
   def build_shortcuts_hint(parent, app)
-    hint = FXLabel.new(parent,
-                       "  Space · Play/Pause    ←/→ · Prev/Next    ↑/↓ · Volume    S · Stop",
+    hint = FXLabel.new(parent,"  Space · Play/Pause    ←/→ · Prev/Next    ↑/↓ · Volume    S · Stop",
                        opts: JUSTIFY_LEFT | LAYOUT_FILL_X)
     hint.font = Theme.label_font(app)
     hint.textColor = Theme::TEXT_MUTED
@@ -283,13 +281,13 @@ class MainWindow < FXMainWindow
       success = @player.play(track[:file])
       if success
         @controls.play_btn.text = "⏸  Pause"
-        @status_label.text      = "Playing  #{track[:title]}  ·  #{track[:artist]}"
-        @state_badge.text       = "PLAYING"
-        @state_badge.textColor  = Theme::ACCENT
+        @status_label.text = "Playing  #{track[:title]}  ·  #{track[:artist]}"
+        @state_badge.text = "PLAYING"
+        @state_badge.textColor = Theme::ACCENT
         set_art_spinning(true)
       else
-        @status_label.text     = "⚠  File not found: #{track[:file]}"
-        @state_badge.text      = "ERROR"
+        @status_label.text = "⚠  File not found: #{track[:file]}"
+        @state_badge.text = "ERROR"
         @state_badge.textColor = Theme::BTN_STOP_TXT
         set_art_spinning(false)
       end
@@ -340,7 +338,7 @@ class MainWindow < FXMainWindow
     track = @song_list.selected_track
     return unless track
 
-    @track_label.text  = track[:title]
+    @track_label.text = track[:title]
     @artist_label.text = track[:artist]
     @status_label.text = "#{track[:title]}  ·  #{track[:artist]}"
     @album_art.update
