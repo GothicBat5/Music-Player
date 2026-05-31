@@ -3,16 +3,15 @@
 # Tracks playback progress independently of ffplay.
 # Uses ffprobe to read total duration once per track, then a monotonic
 # clock to compute elapsed time.  Thread-safe via a Mutex.
-
 class ProgressTracker
   attr_reader :duration_s
 
   def initialize
-    @mutex      = Mutex.new
+    @mutex = Mutex.new
     @start_time = nil
     @duration_s = nil
-    @paused_at  = nil        # elapsed seconds at the moment of pause
-    @running    = false
+    @paused_at = nil        # elapsed seconds at the moment of pause
+    @running = false
   end
 
   def start(file_path)
@@ -38,14 +37,14 @@ class ProgressTracker
     @mutex.synchronize do
       return unless @running
       @paused_at = raw_elapsed
-      @running   = false
+      @running = false
     end
   end
 
   def resume
     @mutex.synchronize do
       return if @running
-      # Shift start_time so elapsed picks up from where we paused
+      # Shift start >> time so elapsed picks up from where we paused
       if @paused_at && @start_time
         @start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC) - @paused_at
         @paused_at  = nil
@@ -78,14 +77,14 @@ class ProgressTracker
     format_time(elapsed_s)
   end
 
-  # "-m:ss" remaining, or "--:--" when duration unknown
+
   def remaining_str
     return "--:--" unless @duration_s
     remaining = [@duration_s - elapsed_s, 0].max
     format_time(remaining)
   end
 
-  # Full "m:ss" of the track (or "--:--")
+
   def duration_str
     @duration_s ? format_time(@duration_s) : "--:--"
   end
