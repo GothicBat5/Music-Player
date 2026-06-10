@@ -1,33 +1,46 @@
-puts "=== KO Ratio Calculator ==="
+loop do
 
-print "Wins: "
-wins = gets.to_i
+  puts "=== KO Ratio Calculator ===\n"
 
-print "Draws: "
-draws = gets.to_i
+  print "Wins: "
+  wins = gets.to_i
 
-print "Losses: "
-losses = gets.to_i
+  print "Losses: "
+  losses = gets.to_i
 
-print "KO Wins: "
-ko = gets.to_i
+  print "Draws: "
+  draws = gets.to_i
 
-puts
+  print "KO Wins: "
+  ko = gets.to_i
 
-if ko > wins
+  puts
 
-  puts "Error: KO wins cannot exceed total wins."
+  if ko > wins
 
-elsif wins == 0
+    puts "Error: KO wins cannot exceed total wins."
 
-  puts "KO Ratio: 0.00%"
-  puts "Reason: No wins recorded."
+  elsif wins == 0
 
-else
+    puts "KO Ratio: 0.00%"
+    puts "Reason: No wins recorded."
 
-  ratio = (ko.to_f / wins) * 100
+  else
 
-  puts "Record: #{wins}-#{losses}-#{draws}"
-  puts "\nKO Ratio: #{format('%.2f', ratio)}%"
+    ratio = (ko.to_f / wins) * 100
+
+    puts "Record: #{wins}-#{losses}-#{draws}"
+    puts "\nKO Ratio: #{format('%.2f', ratio)}%"
+
+  end
+
+  puts "\nX to exit or press ENTER to continue>"
+  choice = gets.chomp
+
+  break if choice.downcase == "x"
+
+  puts
 
 end
+
+puts "\nProgram Ended."
