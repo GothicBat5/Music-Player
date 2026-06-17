@@ -5,3 +5,5 @@ I used FFplay for the audio, this support fully and Ruby can detect once it gets
 Just download the FFplay online and find a permanent folder for zip extraction. Later you will system path it
 
 Need:: Update() = Red Stone (the main window) + Art 
+
+[FF Player](https://www.ffmpeg.org/)
