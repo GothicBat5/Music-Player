@@ -1,5 +1,4 @@
 # A is what percent of B? 
-
 print "A: "
 a = gets.to_f
 
