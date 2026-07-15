@@ -13,10 +13,12 @@ ENV["VISUAL"] = nil
 ENV["BUNDLER_EDITOR"] = nil
 require "bundler"
 gem "diff-lcs", "< 2.0"
+
 require "rspec/core"
 require "rspec/expectations"
 require "rspec/mocks"
 require "rspec/support/differ"
+
 gem "rubygems-generate_index"
 require "rubygems/indexer"
 
@@ -48,6 +50,7 @@ begin
     add_filter "/tool/"
     add_filter "/tmp/"
     add_filter ".gemspec"
+    
   end
 
   SimpleCov.print_error_status = false
@@ -84,11 +87,13 @@ RSpec.configure do |config|
   config.include Spec::Platforms
   
   config.include Spec::Permissions
-  
+
   config.include Spec::Shards
   
   config.example_status_persistence_file_path = ".rspec_status"
+  
   config.silence_filter_announcements = !ENV["TEST_ENV_NUMBER"].nil?
+  
   config.backtrace_exclusion_patterns <<
     %r{./spec/(spec_helper\.rb|support/.+)}
 
@@ -161,7 +166,9 @@ RSpec.configure do |config|
       end
     end
   ensure
+    
     reset!
+    
   end
 
   Spec::Shards::EXAMPLE_MAPPINGS.each do |tag, file_paths|
