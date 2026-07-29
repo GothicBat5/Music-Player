@@ -1,6 +1,9 @@
 # About stuff 
 > Audio Player Software
+
+
 ![Ruby](Art/redv.jpeg)
+
 
 ## Audio decode
 I used `FFplay` for the audio, this support fully and Ruby can detect once it gets in the `"System path"`
