@@ -49,17 +49,14 @@ label_frame = FXHorizontalFrame.new(main, LAYOUT_FILL_X,
   backColor: PianoStyle::COLOR_LABEL_BG
 )
 
-label = FXLabel.new(
-  label_frame,
-  "Press keyboard keys or click piano keys to play",
+label = FXLabel.new(label_frame, "Press keyboard keys or click piano keys to play",
   nil,
   LAYOUT_FILL_X | JUSTIFY_LEFT,
   backColor: PianoStyle::COLOR_LABEL_BG,
   foreColor: PianoStyle::COLOR_LABEL_TEXT
 )
 
-canvas_frame = FXVerticalFrame.new(
-  main, LAYOUT_FILL_X | LAYOUT_FILL_Y,
+canvas_frame = FXVerticalFrame.new(main, LAYOUT_FILL_X | LAYOUT_FILL_Y,
   padLeft: PianoStyle::FRAME_PAD_SIDE,
   padRight: PianoStyle::FRAME_PAD_SIDE,
   padTop: PianoStyle::FRAME_PAD_TOP,
@@ -67,9 +64,7 @@ canvas_frame = FXVerticalFrame.new(
   backColor: PianoStyle::COLOR_FRAME
 )
 
-canvas = FXCanvas.new(
-  canvas_frame,
-  nil, 0,
+canvas = FXCanvas.new(canvas_frame, nil, 0,
   LAYOUT_FILL_X | LAYOUT_FILL_Y,
   width: PianoStyle::CANVAS_WIDTH,
   height: PianoStyle::CANVAS_HEIGHT
@@ -86,20 +81,12 @@ canvas.connect(SEL_PAINT) do |sender, sel, event|
     dc.foreground = PianoStyle::COLOR_FRAME
     dc.fillRectangle(0, 0, canvas.width, canvas.height)
 
-    PianoUI.draw(
-      dc,
-      key_rects,
-      pressed_keys,
-      0,
-      0
-    )
+    PianoUI.draw(dc, key_rects, pressed_keys, 0, 0)
   end
 end
 
 
-PianoInput.attach(
-  window: window,
-  canvas: canvas,
+PianoInput.attach(window: window, canvas: canvas,
   key_rects: key_rects,
   pressed_keys: pressed_keys,
   label: label,
