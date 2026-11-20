@@ -1,7 +1,3 @@
-# piano_input.rb
-# Wires up keyboard and mouse input to the piano canvas.
-# Handles key press/release for visual feedback and note playback.
-
 require 'fox16'
 include Fox
 require_relative 'piano_keys'
@@ -11,8 +7,6 @@ module PianoInput
 
 
   def self.attach(window:, canvas:, key_rects:, pressed_keys:, label:, on_play:, frame_x:, frame_y:)
-
-
     key_to_id = PianoKeys::KEY_MAP.invert
 
     # Keyboard press
